@@ -5,7 +5,9 @@ require([
   "esri/Graphic",
   "esri/layers/GraphicsLayer",
   "esri/layers/FeatureLayer",
-], function (esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer) {
+  "esri/widgets/Editor"
+
+], function (esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Editor) {
   esriConfig.apiKey =
     "AAPK7a7ab4389a5d49e6baa08b2db7987c36t7-xSeM7W_C_4WgjNwvZHp-6iY2m0a50YtOBjTaD2LqDhdvOH-tzFAsITV2yCxlQ"; // Make sure to use your actual API key
 
@@ -190,4 +192,48 @@ require([
 
   //adding the feature layer to the map
   map.add(usaeduLayer);
+
+  // write
+  const myAirports = new FeatureLayer({
+    url: "https://services.arcgis.com/LBbVDC0hKPAnLRpO/arcgis/rest/services/Airports_Write/FeatureServer",
+    outFields: ["AirportCode"],
+    labelingInfo: [{
+      labelExpressionInfo: { expression: "$feature.AirportCode" },
+      symbol: {
+        type: "text",
+        color: "blue",
+        haloColor: "white",
+        haloSize: "1px",
+        font: { size: 18 }
+      },
+      labelPlacement: "above-center"
+    }],
+    renderer: {
+      type: "simple",  // autocasts as new SimpleRenderer()
+      symbol: {
+        type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+        style: "circle",
+        color: "blue",
+        size: "8px",  // pixels
+        outline: {  // autocasts as new SimpleLineSymbol()
+          color: [0, 0, 255],
+          width: 3  // points
+        }
+      }
+    }
+  });
+
+  map.add(myAirports);
+
+  const pointInfos = {
+    layer: myAirports,
+  }
+
+  const editor = new Editor({
+    view: view,
+    layerInfos: [pointInfos]
+  });
+
+  view.ui.add(editor, "top-right");
+
 });
