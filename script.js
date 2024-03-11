@@ -5,9 +5,10 @@ require([
   "esri/Graphic",
   "esri/layers/GraphicsLayer",
   "esri/layers/FeatureLayer",
-  "esri/widgets/Editor"
+  "esri/widgets/Editor",
+  "esri/widgets/Legend"
 
-], function (esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Editor) {
+], function (esriConfig, Map, MapView, Graphic, GraphicsLayer, FeatureLayer, Editor, Legend) {
   esriConfig.apiKey =
     "AAPK7a7ab4389a5d49e6baa08b2db7987c36t7-xSeM7W_C_4WgjNwvZHp-6iY2m0a50YtOBjTaD2LqDhdvOH-tzFAsITV2yCxlQ"; // Make sure to use your actual API key
 
@@ -236,4 +237,28 @@ require([
 
   view.ui.add(editor, "top-right");
 
+
+  const legend = new Legend({
+    view: view,
+    layerInfos: [
+      {
+        layer: airportsusaLayer,
+        title: "Airports"
+      },
+      {
+        layer: heliLayer,
+        title: "Heliports"
+      },
+      {
+        layer: usaeduLayer,
+        title: "Colleges and Universities"
+      },
+      {
+        layer: myAirports,
+        title: "Airport Codes"
+      }
+    ]
+  });
+  view.ui.add(legend, "bottom-right");
 });
+
